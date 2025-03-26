@@ -70,10 +70,10 @@ class ZaloOaService
     }
 
 
-    public function getAccessToken()
+    public function getAccessToken($id)
     {
         //Lấy OA từ database
-        $oa = ZaloOa::where('user_id', Auth::user()->id)->where('is_active', 1)->first();
+        $oa = ZaloOa::where('user_id',$id)->where('is_active', 1)->first();
         if (!$oa) {
             Log::error('Không tìm thấy OA nào có trạng thái là is_active');
             throw new Exception('Không tìm thấy OA đang hoạt động ');

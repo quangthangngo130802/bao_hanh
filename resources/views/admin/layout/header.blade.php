@@ -70,7 +70,7 @@
                     </a>
                 </li> --}}
 
-                @if ((Auth::user()->role_id == 2 && Auth::user()->status == 1) || Auth::user()->role_id == 1)
+                {{-- @if ((Auth::user()->role_id == 2 && Auth::user()->status == 1) || Auth::user()->role_id == 1)
                     <li class="nav-item topbar-user dropdown hidden-caret">
                         <a class="dropdown-toggle profile-pic" id="open-add-modal"
                             style="background-color: white; border-color: white; justify-content: center !important;"
@@ -80,7 +80,7 @@
 
                         </a>
                     </li>
-                @endif
+                @endif --}}
 
                 {{-- <li class="nav-item topbar-user dropdown hidden-caret">
 <a href="javascript:void(0)" id="open-add-oa-modal"
@@ -89,7 +89,7 @@
                             class="fa-solid fa-plus"></i> Thêm OA
                     </a>
                 </li> --}}
-                @if (Auth::user()->role_id == 1)
+                {{-- @if (Auth::user()->role_id == 1)
                     <li class="nav-item topbar-user dropdown hidden-caret">
                         <a class="dropdown-toggle profile-pic" id="open-add-oa-modal"
                             style="background-color: white; border-color: white;justify-content: center !important;"
@@ -99,7 +99,7 @@
 
                         </a>
                     </li>
-                @endif
+                @endif --}}
 
                 <li class="nav-item topbar-user dropdown hidden-caret">
                     <a class="dropdown-toggle profile-pic" target="_blank" style="justify-content: center !important;"

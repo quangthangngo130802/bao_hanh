@@ -99,7 +99,7 @@
                         </a>
                     </li>
                 @endif
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#sidebargiaodich">
                         <i class="fas fa-dollar"></i>
                         <p>Giao dịch</p>
@@ -122,12 +122,6 @@
                         </ul>
                     </div>
                 </li>
-                {{-- <li class="nav-item">
-                    <a href="{{ route('admin.{username}.campaign.index', ['username' => Auth::user()->username]) }}">
-                        <i class="fas fa-user"></i>
-                        <p>Chiến dịch</p>
-                    </a>
-                </li> --}}
                 <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#sidebarcauhinh">
                         <i class="fas fa-cogs"></i>
@@ -161,24 +155,7 @@
                                 </a>
                             </li>
 
-                            {{-- <li>
-                                <a
-                                    href="{{ route('admin.{username}.automation.user', ['username' => Auth::user()->username]) }}">
-                                    <span class="sub-item">Khách hàng</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="{{ route('admin.{username}.automation.birthday', ['username' => Auth::user()->username]) }}">
-                                    <span class="sub-item">Sinh nhật</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="{{ route('admin.{username}.automation.reminder', ['username' => Auth::user()->username]) }}">
-                                    <span class="sub-item">Nhắc nhở</span>
-                                </a>
-                            </li> --}}
+
                         </ul>
                     </div>
                 </li>
@@ -211,7 +188,7 @@
 
                         </ul>
                     </div>
-                </li>
+                </li> --}}
             </ul>
         </div>
     </div>

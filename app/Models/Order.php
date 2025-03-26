@@ -13,24 +13,7 @@ class Order extends Model
 {
     use HasFactory;
     protected $table = 'orders';
-    protected $fillable = [
-        "total_money",
-        "status",
-        "note",
-        "receive_address",
-        "user_id",
-        'client_id',
-        'name',
-        'phone',
-        'zip_code',
-        'notification',
-    ];
-
-    protected $appends = ['orderdetail'];
-
-    public function getOrderdetailAttribute(){
-        return OrderDetail::where('order_id',$this->attributes['id'])->get();
-    }
+    protected $fillable = ['order_code', 'phone'];
     public function orderDetails()
     {
         return $this->hasMany(OrderDetail::class);

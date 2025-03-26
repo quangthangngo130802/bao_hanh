@@ -5,7 +5,7 @@
     <style>
         .swiper-container {
             width: 100%;
-           
+
             overflow-x: hidden;
         }
 
@@ -89,7 +89,7 @@
                 </a>
             </div>
             <div class="col-sm-6 col-md-3">
-                <a href="{{ route('admin.{username}.zalo.zns', ['username' => Auth::user()->username]) }}"
+                <a  {{-- {{ route('admin.{username}.zalo.zns', ['username' => Auth::user()->username]) }} --}}
                     class="card card-stats card-round">
                     <div class="card-body">
                         <div class="row align-items-center">

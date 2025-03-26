@@ -29,7 +29,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
-class StoreService
+class SheetService
 {
     protected $user;
     protected $automationUser;
@@ -92,10 +92,10 @@ class StoreService
             throw new Exception('Failed to delete store profile');
         }
     }
-    public function generateCode($phone)
+    public function generateCode($phone, $id)
     {
         $lastFourDigits = substr($phone, -4);
-        $prefix = Auth::user()->prefix;
+        $prefix = User::find($id)->prefix;
         return $prefix . '_' . $lastFourDigits;
     }
     public function addNewStore(array $data)
@@ -106,9 +106,9 @@ class StoreService
             Log::info('Starting process to create new client with data: ', $data);
 
             // Lấy thông tin user hiện tại
-            $user = Auth::user();
+            $user = User::find($data['user_id']);
             $user_id = $user->id;
-            $code = $this->generateCode($data['phone']);
+            $code = $this->generateCode($data['phone'], $user_id);
 
             // Tạo khách hàng mới
             $customer = Customer::create([
@@ -125,7 +125,7 @@ class StoreService
             // $apiUrl = 'http://127.0.0.1:9000/api/customer-create';
             // $response = Http::post($apiUrl, $customer);
 
-            $product_name = 'Chưa chọn dịch vụ';
+            $product_name = 'Máy lọc nước 12 Tháng !';
 
             // Kiểm tra nếu có product_id
             if (!empty($data['product_id'])) {
@@ -137,12 +137,12 @@ class StoreService
             Log::info('Customer created successfully: ' . json_encode($customer));
 
             // Lấy token và thông tin cần thiết từ API Zalo
-            $accessToken = $this->zaloOaService->getAccessToken();
-            $oa_id = ZaloOa::where('user_id', Auth::user()->id)->where('is_active', 1)->first()->id;
-            $automationUser = AutomationUser::where('user_id', Auth::user()->id)->first();
-            $automationRate = AutomationRate::where('user_id', Auth::user()->id)->first();
-            $automationBirthday = AutomationBirthday::where('user_id', Auth::user()->id)->first();
-            $automationReminder = AutomationReminder::where('user_id', Auth::user()->id)->first();
+            $accessToken = $this->zaloOaService->getAccessToken($user_id);
+            $oa_id = ZaloOa::where('user_id', $user_id)->where('is_active', 1)->first()->id;
+            $automationUser = AutomationUser::where('user_id', $user_id)->first();
+            $automationRate = AutomationRate::where('user_id', $user_id)->first();
+            $automationBirthday = AutomationBirthday::where('user_id', $user_id)->first();
+            $automationReminder = AutomationReminder::where('user_id', $user_id)->first();
             $template_code = $automationUser->template->template_id ?? null;
             $rate_template_code = $automationRate->template->template_id ?? null;
             $birthday_template_code = $automationBirthday->template->template_id ?? null;
@@ -268,10 +268,10 @@ class StoreService
         try {
             Log::info('Starting process to update customer with data: ', $data);
 
-            $user = Auth::user();
+            $user = User::find($data['user_id']);
             $user_id = $user->id;
-            $code = $this->generateCode($data['phone']);
-            $customer = Customer::where('user_id', Auth::user()->id)->where('id', $id)->first();
+            $code = $this->generateCode($data['phone'], $user_id);
+            $customer = Customer::where('user_id', $user_id)->where('id', $id)->first();
             $updateData = [
                 'name' => $data['name'] ?? null,
                 'phone' => $data['phone'] ?? null,
@@ -294,17 +294,17 @@ class StoreService
             $customer->update($updateData);
 
 
-            $product_name = 'Chưa chọn dịch vụ';
+            $product_name = 'Máy lọc nước 12 Tháng !';
             if (!empty($data['product_id'])) {
                 $product = Product::find($data['product_id']);
                 $product_name = $product ? $product->name : $product_name;
             }
 
-            $accessToken = $this->zaloOaService->getAccessToken();
-            $oa_id = ZaloOa::where('user_id', Auth::user()->id)->where('is_active', 1)->first()->id;
-            $automationUser = AutomationUser::where('user_id', Auth::user()->id)->first();
-            $automationRate = AutomationRate::where('user_id', Auth::user()->id)->first();
-            $automationBirthday = AutomationBirthday::where('user_id', Auth::user()->id)->first();
+            $accessToken = $this->zaloOaService->getAccessToken($user_id);
+            $oa_id = ZaloOa::where('user_id', $user_id)->where('is_active', 1)->first()->id;
+            $automationUser = AutomationUser::where('user_id', $user_id)->first();
+            $automationRate = AutomationRate::where('user_id', $user_id)->first();
+            $automationBirthday = AutomationBirthday::where('user_id', $user_id)->first();
             $template_code = $automationUser->template->template_id ?? null;
             $rate_template_code = $automationRate->template->template_id ?? null;
             $birthday_template_code = $automationBirthday->template->template_id ?? null;
