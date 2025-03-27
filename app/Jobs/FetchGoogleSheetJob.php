@@ -33,8 +33,6 @@ class FetchGoogleSheetJob implements ShouldQueue
             // Kiểm tra nếu user chưa đăng nhập
             $storeService = app()->make(SheetService::class);
 
-            Log::info($this->userId);
-
             $sheetdb = new SheetDB('ofxb88lmfye60');
             $response = $sheetdb->get();
 
