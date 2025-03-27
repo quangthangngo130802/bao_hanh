@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Responses\ApiResponse;
+use App\Models\AutomationUser;
+use App\Models\OaTemplate;
 use App\Models\ZaloOa;
 use App\Models\ZnsMessage;
 use App\Services\OaTemplateService;
@@ -91,12 +93,14 @@ class ZnsMessageController extends Controller
         $title = 'Thông tin ZNS Template';
         $templates = $this->oaTemplateService->getAllTemplateByOaID();
         $initialTemplateData = null;
+        $template_id = AutomationUser::where('user_id', Auth::user()->id)->first()->template_id;
+        $oa_template = OaTemplate::where('id', $template_id)->first()->template_id;
 
         if ($templates->isNotEmpty()) {
-            $initialTemplateData = $this->oaTemplateService->getTemplateById($templates->first()->template_id, $templates->first()->oa_id);
+            $initialTemplateData = $this->oaTemplateService->getTemplateById($oa_template, $templates->first()->oa_id);
         }
 
-        return view('admin.message.template', compact('templates', 'initialTemplateData', 'title'));
+        return view('admin.message.template', compact('templates', 'initialTemplateData', 'title', 'oa_template'));
     }
 
     public function getTemplateDetail(Request $request)
@@ -130,7 +134,7 @@ class ZnsMessageController extends Controller
     }
 
 
-    public function refreshTemplates()
+    public function refreshTemplates(Request $request)
     {
         try {
             $statusMessage = $this->oaTemplateService->checkTemplate();
@@ -145,8 +149,13 @@ class ZnsMessageController extends Controller
             // Get the details of the first template if it exists
             $initialTemplateData = null;
             if ($templates->isNotEmpty()) {
-                $initialTemplateData = $this->oaTemplateService->getTemplateById($templates->first()->template_id, $templates->first()->oa_id);
+                $initialTemplateData = $this->oaTemplateService->getTemplateById($request->template_id, $templates->first()->oa_id);
             }
+
+            $oaTemplate =  OaTemplate::where('template_id', $request->template_id)->first()->id;
+            AutomationUser::where('user_id', Auth::user()->id)->update([
+                'template_id' => $oaTemplate
+            ]);
 
             return response()->json(['templates' => $options, 'initialTemplateData' => $initialTemplateData]);
         } catch (Exception $e) {

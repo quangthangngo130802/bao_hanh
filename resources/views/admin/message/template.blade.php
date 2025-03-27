@@ -79,7 +79,7 @@
                         <option value="">Chưa có template</option>
                     @else
                         @foreach ($templates as $template)
-                            <option value="{{ $template->template_id }}" {{ $loop->first ? 'selected' : '' }}>
+                            <option value="{{ $template->template_id }}" {{ $oa_template == $template->template_id ? 'selected' : '' }}>
                                 {{ $template->template_name }}
                             </option>
                         @endforeach
@@ -136,9 +136,16 @@
 
             // Handle refresh button click
             $('#refreshButton').click(function() {
+                let firstOption = $("#templateDropdown");
+                let selectedValue = firstOption.val();
+                // alert(selectedValue);
                 $.ajax({
                     url: '{{ route('admin.{username}.message.znsTemplateRefresh', ['username' => Auth::user()->username]) }}',
                     method: 'GET',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        template_id: selectedValue,
+                    },
                     success: function(response) {
                         // Cập nhật dropdown với templates mới
                         $('#templateDropdown').html(response.templates);
