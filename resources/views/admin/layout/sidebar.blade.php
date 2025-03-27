@@ -160,7 +160,7 @@
                     </div>
                 </li>
                 --}}
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#sidebarzns">
                         <i class="fas fa-cogs"></i>
                         <p>Truy vấn ZNS</p>
@@ -189,7 +189,7 @@
 
                         </ul>
                     </div>
-                </li>
+                </li> --}}
             </ul>
         </div>
     </div>
