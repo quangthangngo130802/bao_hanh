@@ -62,7 +62,7 @@ use Illuminate\Support\Facades\Route;
 // Route::get('', [CategorieController::class, 'index']);
 Route::post('/check-account', [SignUpController::class, 'checkAccount'])->name('check.account');
 
-Route::get('/bao-hang/kich-hoat-bao-hanh', [BaoHanhController::class, 'index']);
+Route::get('/bao-hanh/kich-hoat-bao-hanh', [BaoHanhController::class, 'index']);
 Route::post('/check-account', [BaoHanhController::class, 'baohanh'])->name('baohanh.kichhoat');
 
 // Route::get('/check-phone-exists', [SignUpController::class, 'checkPhoneExists'])->name('check-phone-exists');
