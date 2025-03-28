@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Product;
+use App\Models\SanPham;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -11,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 class ProductService
 {
     protected $product;
-    public function __construct(Product $product)
+    public function __construct(SanPham $product)
     {
         $this->product = $product;
     }
@@ -19,7 +20,7 @@ class ProductService
     public function getPaginatedProduct()
     {
         try {
-            return $this->product->where('user_id', Auth::user()->id)->orderByDesc('created_at')->paginate(10);
+            return $this->product->orderByDesc('created_at')->paginate(10);
         } catch (Exception $e) {
             Log::error('Failed to get paginated product list: ' . $e->getMessage());
             throw new Exception('Failed to get paginated product list');
@@ -42,7 +43,9 @@ class ProductService
         try {
             $product = $this->product->create([
                 'name' => $data['name'],
-                'user_id' => Auth::user()->id,
+                'masp' => $data['masp'],
+                'warranty_period' => $data['warranty_period']
+
             ]);
             DB::commit();
             return $product;
@@ -55,11 +58,12 @@ class ProductService
     {
         DB::beginTransaction();
         try {
-            $product = Product::find($id);
-
+            $product = SanPham::find($id);
             // Update product information
             $product->update([
                 'name' => $data['name'],
+                'masp' => $data['masp'],
+                'warranty_period' => $data['warranty_period']
             ]);
 
             DB::commit();

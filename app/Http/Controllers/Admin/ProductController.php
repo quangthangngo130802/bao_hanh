@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Responses\ApiResponse;
 use App\Models\Product;
+use App\Models\SanPham;
 use App\Services\ProductService;
 use Exception;
 use Illuminate\Http\Request;
@@ -21,14 +22,14 @@ class ProductController extends Controller
     public function index()
     {
         try {
-            $title = 'Danh sách sản phẩm và dịch vụ';
-            $products = $this->productService->getPaginatedProduct();
+            $title = 'Danh sách sản phẩm';
+            $sanpham = SanPham::orderByDesc('created_at')->paginate(10);;
 
             if (request()->ajax()) {
-                $view = view('admin.product.table', compact('products'))->render(); // Thay $campaigns bằng $products
+                $view = view('admin.product.table', compact('sanpham'))->render(); // Thay $campaigns bằng $products
                 return response()->json(['success' => true, 'table' => $view]);
             }
-            return view('admin.product.index', compact('products', 'title'));
+            return view('admin.product.index', compact('sanpham', 'title'));
         } catch (Exception $e) {
             Log::error('Failed to get Paginated product list: ' . $e->getMessage());
             return ApiResponse::error('Failed to get paginated product list', 500);
@@ -42,11 +43,11 @@ class ProductController extends Controller
             $this->productService->createNewProduct($request->all());
 
             // Lấy lại danh sách sản phẩm đã phân trang
-            $products = $this->productService->getPaginatedProduct();
+            $sanpham = $this->productService->getPaginatedProduct();
 
             // Render lại bảng sản phẩm và phân trang
-            $table = view('admin.product.table', compact('products'))->render();
-            $pagination = $products->links('vendor.pagination.custom')->render();
+            $table = view('admin.product.table', compact('sanpham'))->render();
+            $pagination = $sanpham->links('vendor.pagination.custom')->render();
 
             return response()->json([
                 'success' => true,
@@ -68,9 +69,9 @@ class ProductController extends Controller
     {
         try {
             $this->productService->updateProduct($request->all(), $request->input('id')); // Lấy ID từ input ẩn
-            $products = $this->productService->getPaginatedProduct();
-            $table = view('admin.product.table', compact('products'))->render();
-            $pagination = $products->links('vendor.pagination.custom')->render();
+            $sanpham = $this->productService->getPaginatedProduct();
+            $table = view('admin.product.table', compact('sanpham'))->render();
+            $pagination = $sanpham->links('vendor.pagination.custom')->render();
 
             return response()->json([
                 'success' => true,
@@ -89,11 +90,11 @@ class ProductController extends Controller
         try {
             $this->productService->deleteProduct(request()->id);
             // Lấy lại danh sách sản phẩm đã phân trang
-            $products = $this->productService->getPaginatedProduct();
+            $sanpham = $this->productService->getPaginatedProduct();
 
             // Render lại bảng sản phẩm và phân trang
-            $table = view('admin.product.table', compact('products'))->render();
-            $pagination = $products->links('vendor.pagination.custom')->render();
+            $table = view('admin.product.table', compact('sanpham'))->render();
+            $pagination = $sanpham->links('vendor.pagination.custom')->render();
 
             return response()->json([
                 'success' => true,

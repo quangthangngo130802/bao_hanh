@@ -194,7 +194,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title" style="text-align: center; color:white">Danh sách sản phẩm - dịch vụ</h4>
+                        <h4 class="card-title" style="text-align: center; color:white">Danh sách sản phẩm</h4>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -220,12 +220,12 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-12" id="company-table">
-                                        @include('admin.product.table', ['products' => $products])
+                                        @include('admin.product.table', ['sanpham' => $sanpham])
                                     </div>
                                     <div class="col-sm-12" id="pagination">
 
-                                        @if ($products instanceof \Illuminate\Pagination\LengthAwarePaginator)
-                                            {{ $products->links('vendor.pagination.custom') }}
+                                        @if ($sanpham instanceof \Illuminate\Pagination\LengthAwarePaginator)
+                                            {{ $sanpham->links('vendor.pagination.custom') }}
                                         @endif
                                     </div>
                                 </div>
@@ -241,28 +241,50 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="updateProductModalLabel">Thêm sản phẩm mới</h5>
+                    <h5 class="modal-title" id="updateProductModalLabel">Sửa sản phẩm</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="update-product-form">
                         @csrf
-                        <!-- Tên sản phẩm -->
-                        <div class="mb-3">
-                            <label for="name" class="form-label">Tên sản phẩm <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="name" name="name" required>
-                            <input type="hidden" id="product-id" name="id"> <!-- Input ẩn cho ID sản phẩm -->
-                            <small id="name-error" class="text-danger"></small>
+                        <div class="row g-3">
+                            <!-- Mã sản phẩm -->
+                            <div class="col-md-12">
+                                <label for="masp" class="form-label fw-bold">Mã sản phẩm <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="masp" name="masp" required placeholder="Nhập mã sản phẩm">
+                                <small id="masp-error" class="text-danger"></small>
+                            </div>
+
+                            <!-- Tên sản phẩm -->
+                            <div class="col-md-12">
+                                <label for="name" class="form-label fw-bold">Tên sản phẩm <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="name" name="name" required placeholder="Nhập tên sản phẩm">
+                                <input type="hidden" id="product-id" name="id"> <!-- Input ẩn cho ID sản phẩm -->
+                                <small id="name-error" class="text-danger"></small>
+                            </div>
+
+                            <!-- Thời gian bảo hành -->
+                            <div class="col-12">
+                                <label for="warranty_period" class="form-label fw-bold">Thời gian bảo hành <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="warranty_period" name="warranty_period" required placeholder="VD: 12 tháng">
+                                <small id="warranty_period-error" class="text-danger"></small>
+                            </div>
                         </div>
-                        <button type="submit" class="btn btn-primary">Xác nhận</button>
+
+                        <div class="d-flex justify-content-end mt-3">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa-solid fa-check"></i> Xác nhận
+                            </button>
+                        </div>
                     </form>
+
                 </div>
 
             </div>
         </div>
     </div>
     <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered ">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addClientModalLabel">Thêm sản phẩm mới</h5>
@@ -271,16 +293,39 @@
                 <div class="modal-body">
                     <form id="add-product-form">
                         @csrf
-                        <!-- Tên sản phẩm -->
-                        <div class="mb-3">
-                            <label for="name" class="form-label">Tên sản phẩm <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="name" name="name" required>
-                            <input hidden name="user_id" value="{{ Auth::user()->username }}">
-                            <small id="name-error" class="text-danger"></small>
+                        <div class="row g-3">
+                            <!-- Mã sản phẩm -->
+                            <div class="col-md-12">
+                                <label for="masp" class="form-label fw-bold">Mã sản phẩm <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="masp" name="masp" required placeholder="Nhập mã sản phẩm">
+                                <small id="masp-error" class="text-danger"></small>
+                            </div>
+
+                            <!-- Tên sản phẩm -->
+                            <div class="col-md-12">
+                                <label for="name" class="form-label fw-bold">Tên sản phẩm <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="name" name="name" required placeholder="Nhập tên sản phẩm">
+                                <input type="hidden" id="product-id" name="id"> <!-- Input ẩn cho ID sản phẩm -->
+                                <small id="name-error" class="text-danger"></small>
+                            </div>
+
+                            <!-- Thời gian bảo hành -->
+                            <div class="col-12">
+                                <label for="warranty_period" class="form-label fw-bold">Thời gian bảo hành <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="warranty_period" name="warranty_period" required placeholder="Nhập thời gian bảo hành (VD: 12)">
+                                <small id="warranty_period-error" class="text-danger"></small>
+                            </div>
+
+                            <!-- Nút xác nhận -->
+                            <div class="d-flex justify-content-end mt-3">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa-solid fa-check"></i> Xác nhận
+                                </button>
+                            </div>
                         </div>
-                        <button type="submit" class="btn btn-primary">Xác nhận</button>
                     </form>
                 </div>
+
             </div>
         </div>
     </div>
@@ -347,10 +392,14 @@
                 // Lấy thông tin sản phẩm từ data-attribute
                 var productId = $(this).data('id');
                 var productName = $(this).data('name');
+                var masp = $(this).data('masp');
+                var warranty_period = $(this).data('warranty_period');
 
                 // Đổ tên sản phẩm và ID vào input trong modal
                 $('#updateProductModal #name').val(productName);
                 $('#updateProductModal #product-id').val(productId); // Thiết lập ID sản phẩm
+                $('#updateProductModal #masp').val(masp);
+                $('#updateProductModal #warranty_period').val(warranty_period);
 
                 // Hiển thị modal cập nhật sản phẩm
                 $('#updateProductModal').modal('show');
@@ -370,15 +419,24 @@
                         type: 'POST',
                         data: formData,
                         success: function(response) {
+                            console.log(response);
                             if (response.success) {
-                                // Ẩn modal và hiển thị thông báo thành công
+                                Swal.fire({
+                                icon: 'success',
+                                title: 'Thành công!',
+                                text: 'Thêm sản phẩm thành công',
+                                showConfirmButton: false,
+                                timer: 1500,
+                                position: 'top-end',
+                                toast: true
+                            });
+                            $('#addProductModal').modal('hide'); 
                                 $('#updateProductModal').modal('hide');
-                                alert(response
-                                .message); // Có thể thay bằng Swal hoặc notify
+                                // alert(response.message); // Có thể thay bằng Swal hoặc notify
 
-                                // Cập nhật bảng sản phẩm và phân trang nếu có
-                                $('#productTable').html(response.table);
-                                $('#pagination').html(response.pagination);
+                                $('#company-table').html(response.table);
+                            $('#pagination').html(response.pagination);
+
                             } else {
                                 alert(response.message);
                             }
@@ -420,6 +478,7 @@
                             // Cập nhật bảng và phân trang nếu cần
                             $('#company-table').html(response.table);
                             $('#pagination').html(response.pagination);
+                            location.reload();
                         } else {
                             console.log('Response failed:', response);
                             Swal.fire({
