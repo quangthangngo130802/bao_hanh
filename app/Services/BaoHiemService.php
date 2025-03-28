@@ -95,7 +95,7 @@ class BaoHiemService
     public function generateCode($phone)
     {
         $lastFourDigits = substr($phone, -4);
-        $prefix = Auth::user()->prefix;
+        $prefix =  User::find(1)->prefix;
         return $prefix . '_' . $lastFourDigits;
     }
     public function addNewStore(array $data)
@@ -219,8 +219,8 @@ class BaoHiemService
     public function updateCustomer($id, array $data)
     {
         DB::beginTransaction();
-        try {
-            Log::info('Starting process to update customer with data: ', $data);
+        // try {
+        //     Log::info('Starting process to update customer with data: ', $data);
 
             $user = User::find(1);
             $user_id = $user->id;
@@ -320,11 +320,11 @@ class BaoHiemService
             DB::commit();
             Log::info('Transaction committed successfully');
             return $customer;
-        } catch (Exception $e) {
-            DB::rollBack();
-            Log::error('Failed to update client: ' . $e->getMessage());
-            throw new Exception('Failed to update client');
-        }
+        // } catch (Exception $e) {
+        //     DB::rollBack();
+        //     Log::error('Failed to update client: ' . $e->getMessage());
+        //     throw new Exception('Failed to update client');
+        // }
     }
     public function deductMoneyFromAdminWallet($id, $deductionMoney)
     {
