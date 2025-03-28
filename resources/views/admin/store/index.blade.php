@@ -197,15 +197,15 @@
                         <div class="table-responsive">
                             <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
                                 <div class="row">
-                                    <div class="col-sm-12 col-md-5">
+                                    {{-- <div class="col-sm-12 col-md-5">
                                         <button id="open-import-modal" type="button" class="btn btn-primary">
                                             Import danh sách khách hàng
                                         </button>
                                         <a href="{{ asset('excel/sample.xlsx') }}" class="btn btn-secondary" download>
                                             Tải file mẫu
                                         </a>
-                                    </div>
-                                    <div class="col-sm-12 col-md-6">
+                                    </div> --}}
+                                    {{-- <div class="col-sm-12 col-md-6"> --}}
                                         <form
                                             action="{{ route('admin.{username}.store.findByPhone', ['username' => Auth::user()->username]) }}"
                                             method="GET">
@@ -215,7 +215,7 @@
                                                     placeholder="Nhập số điện thoại" value="{{ old('phone') }}">
                                             </div>
                                         </form>
-                                    </div>
+                                    {{-- </div> --}}
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-12" id="customer-table">

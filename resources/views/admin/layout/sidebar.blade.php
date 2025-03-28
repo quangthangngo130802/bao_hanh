@@ -56,26 +56,7 @@
                         <p>Thêm khách hàng</p>
                     </a>
                 </li>
-                @if (Auth::user()->role_id == 1)
-                    <li class="nav-item mobile-only">
-                        <a href="#addOA">
-                            <i class="fas fa-plus-circle"></i>
-                            <p>Thêm OA</p>
-                        </a>
-                    </li>
-                @endif
-                <li class="nav-item mobile-only">
-                    <a href="#mainWallet">
-                        <i class="fas fa-wallet"></i>
-                        <p>Ví chính</p>
-                    </a>
-                </li>
-                <li class="nav-item mobile-only">
-                    <a href="#subWallet">
-                        <i class="fas fa-wallet"></i>
-                        <p>Ví phụ</p>
-                    </a>
-                </li>
+
                 <li class="nav-section">
                     <span class="sidebar-mini-icon">
                         <i class="fa fa-ellipsis-h"></i>
@@ -90,106 +71,13 @@
                         <p>Khách hàng</p>
                     </a>
                 </li>
-                @if (Auth::user()->role_id == 1)
-                    <li class="nav-item">
-                        <a
-                            href="{{ route('admin.{username}.associate.index', ['username' => Auth::user()->username]) }}">
-                            <i class="fas fa-user"></i>
-                            <p>Cộng sự</p>
-                        </a>
-                    </li>
-                @endif
-                {{-- <li class="nav-item">
-                    <a data-bs-toggle="collapse" href="#sidebargiaodich">
-                        <i class="fas fa-dollar"></i>
-                        <p>Giao dịch</p>
-                        <span class="caret"></span>
-                    </a>
-                    <div class="collapse" id="sidebargiaodich">
-                        <ul class="nav nav-collapse">
-                            <li>
-                                <a
-                                    href="{{ route('admin.{username}.transaction.index', ['username' => Auth::user()->username]) }}">
-                                    <span class="sub-item">Nạp tiền</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="{{ route('admin.{username}.transfer.index', ['username' => Auth::user()->username]) }}">
-                                    <span class="sub-item">Nhận tiền</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
+
                 <li class="nav-item">
-                    <a data-bs-toggle="collapse" href="#sidebarcauhinh">
-                        <i class="fas fa-cogs"></i>
-                        <p>Cấu hình</p>
-                        <span class="caret"></span>
+                    <a href="{{ route('admin.{username}.store.index', ['username' => Auth::user()->username]) }}">
+                        <i class="fas fa-box"></i>
+                        <p>Sản phẩm</p>
                     </a>
-                    <div class="collapse" id="sidebarcauhinh">
-                        <ul class="nav nav-collapse">
-                            <li class="nav-item">
-                                <a
-                                    href="{{ route('admin.{username}.product.index', ['username' => Auth::user()->username]) }}">
-                                    <span class="sub-item">Danh mục</p>
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="{{ route('admin.{username}.zalo.zns', ['username' => Auth::user()->username]) }}">
-                                    <span class="sub-item">Cấu hình OA/ZNS</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="{{ route('admin.{username}.automation.index', ['username' => Auth::user()->username]) }}">
-                                    <span class="sub-item">Automation Marketing</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="{{ route('admin.{username}.message.params', ['username' => Auth::user()->username]) }}">
-                                    <span class="sub-item">Định dạng tham số Template</span>
-                                </a>
-                            </li>
-
-
-                        </ul>
-                    </div>
                 </li>
-                --}}
-                {{-- <li class="nav-item">
-                    <a data-bs-toggle="collapse" href="#sidebarzns">
-                        <i class="fas fa-cogs"></i>
-                        <p>Truy vấn ZNS</p>
-                        <span class="caret"></span>
-                    </a>
-                    <div class="collapse" id="sidebarzns">
-                        <ul class="nav nav-collapse">
-                            <li>
-                                <a
-                                    href="{{ route('admin.{username}.message.znsMessage', ['username' => Auth::user()->username]) }}">
-                                    <span class="sub-item">Report ZNS</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="{{ route('admin.{username}.message.znsQuota', ['username' => Auth::user()->username]) }}">
-                                    <span class="sub-item">Hạn mức ZNS</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('admin.{username}.message.znsTemplate', ['username' => Auth::user()->username]) }}"
-                                    class="check-zalo-oa">
-                                    <span class="sub-item">Template ZNS</span>
-                                </a>
-                            </li>
-
-                        </ul>
-                    </div>
-                </li> --}}
             </ul>
         </div>
     </div>

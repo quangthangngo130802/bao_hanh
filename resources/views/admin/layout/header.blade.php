@@ -69,7 +69,7 @@
                             style="font-size: 18px; padding: 0px 5px; color: rgb(138, 135, 135)"></i> Thêm khách hàng
                     </a>
                 </li> --}}
-
+{{--
                 @if ((Auth::user()->role_id == 2 && Auth::user()->status == 1) || Auth::user()->role_id == 1)
                     <li class="nav-item topbar-user dropdown hidden-caret">
                         <a class="dropdown-toggle profile-pic" id="open-add-modal"
@@ -80,7 +80,7 @@
 
                         </a>
                     </li>
-                @endif
+                @endif --}}
 
                 {{-- <li class="nav-item topbar-user dropdown hidden-caret">
 <a href="javascript:void(0)" id="open-add-oa-modal"
@@ -101,7 +101,7 @@
                     </li>
                 @endif --}}
 
-                <li class="nav-item topbar-user dropdown hidden-caret">
+                {{-- <li class="nav-item topbar-user dropdown hidden-caret">
                     <a class="dropdown-toggle profile-pic" target="_blank" style="justify-content: center !important;"
                         href="{{ route('admin.{username}.transaction.payment', ['username' => Auth::user()->username]) }}"
                         aria-expanded="false">
@@ -117,7 +117,7 @@
                             class="fa-solid fa-wallet"></i> Ví phụ: {{ number_format(\Auth::user()->sub_wallet) }} đ
 
                     </a>
-                </li>
+                </li> --}}
                 <li class="nav-item topbar-icon dropdown hidden-caret"
                     style="justify-content: center !important; display: flex;">
                     <a class="nav-link dropdown-toggle" href="#" id="notifDropdown" role="button"

@@ -1,17 +1,14 @@
-<table id="basic-datatables" class="display table table-striped table-hover dataTable" role="grid"
-    aria-describedby="basic-datatables_info">
+<table id="basic-datatables" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
     <thead>
         <tr>
-            <th>STT</th>
-            <th>Mã khách hàng</th>
-            <th>Tên</th>
-            <th>Điện thoại</th>
-            <th>Thời gian</th>
-            <th>Danh mục</th>
-            <th>Nguồn</th>
-            <th>Chiến dịch</th>
-            <th style="text-align: center">Hành động</th>
+            <th style="width: 5%;">STT</th>
+            <th style="width: 17%;">Mã khách hàng</th>
+            <th style="width: 25%;">Họ Tên</th>
+            <th style="width: 20%;">Sản phẩm</th>
+            <th style="width: 12%;">Thời gian</th>
+            <th style="width: 20%; text-align: center;">Hành động</th>
         </tr>
+
     </thead>
     <tbody>
         @if ($stores && $stores->count() > 0)
@@ -23,30 +20,11 @@
                     <tr>
                         <td>{{ ++$stt }}</td>
                         <td>{{ $value->code ?? '' }}</td>
-                        <td>{{ $value->name ?? '' }}</td>
-                        <td>{{ $value->phone ?? '' }}</td>
-                        <td>{{ $value->created_at ? $value->created_at->format('d/m/Y') : '' }}
-                        </td>
-                        <td>{{ $value->product->name ?? '' }}</td>
-                        <td>{{ $value->source ?? 'Thêm thủ công' }}</td>
-                        <td>
-                            {{-- Accordion for campaigns --}}
-                            @if ($value->campaignDetails && $value->campaignDetails->isNotEmpty())
-                                <button class="accordion-button">
-                                    Xem chiến dịch
-                                </button>
-                                <div class="accordion-content">
-                                    <ul>
-                                        @foreach ($value->campaignDetails as $campaignDetail)
-                                            <li>{{ $campaignDetail->campaign->name ?? 'Không có tên chiến dịch' }}
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @else
-                                Không có chiến dịch
-                            @endif
-                        </td>
+                        <td>{{ $value->name ?? '' }} <p>{{ $value->phone ?? '' }}</p></td>
+                        <td>{{ $value->sanpham->name ?? ''}}</td>
+                        <td>{{ $value->sanpham->warranty_period ?? '' }} Tháng</td>
+                        {{-- <td>{{ $value->source ?? 'Thêm thủ công' }}</td> --}}
+
                         <td style="text-align:center">
                             <a class="btn btn-warning" href="javascript:void(0)" id="customer-detail"
                                 data-id="{{ $value->id }}">

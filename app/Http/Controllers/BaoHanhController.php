@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\SanPham;
+use App\Models\User;
 use App\Services\BaoHiemService;
 use App\Services\SignUpService;
 use App\Services\StoreService;
 use App\Services\ZaloOaService;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -30,40 +33,57 @@ class BaoHanhController extends Controller
     public function baohanh(Request $request){
         $validated = $request->validate([
             'name' => 'required',
-            // 'phone' => [
-            //     'required',
-            //     Rule::unique('sgo_customers')->where(function ($query) {
-            //         return $query->where('user_id', Auth::user()->id);
-            //     })
-            // ],
             'phone' => 'required',
             'email' => 'nullable|email',
-            // 'email' => [
-            //     'nullable',
-            //     'email',
-            //     Rule::unique('sgo_customers')->where(function ($query) {
-            //         return $query->where('user_id', Auth::user()->id);
-            //     })
-            // ],
             'dob' => 'nullable',
             'address' => 'nullable',
             'source' => 'nullable',
             'product_id' => 'nullable|exists:sgo_products,id', // Kiểm tra product_id
+            'masp' => 'required',
+            'address_buy' => 'required'
         ]);
 
-        Log::info('Validation passed', $validated);
-
-        // Tiến hành thêm khách hàng mới
-        $existingUser = Customer::where('user_id',1)->where('phone', $validated['phone'])->first();
-        if (!$existingUser) {
-            Log::info("Start creating new customer");
-            $client = $this->storeService->addNewStore($validated);
-        } elseif ($existingUser) {
-            Log::info("Customer is already existed, start sending message");
-            $client = $this->storeService->updateCustomer($existingUser->id, $validated);
+        $sanpham = SanPham::where('masp', $validated['masp'])->first();
+        if(!$sanpham){
+            return redirect()->back()->with('error', 'Mã sản phẩm không tồn tại.');
         }
 
-        return redirect()->back();
+        $validated['product_name'] = $sanpham->name;
+        $validated['warranty_period'] = $sanpham->warranty_period.' Tháng';
+
+        Log::info('Validation passed', $validated);
+        $user = User::first();
+
+        $validated['user_id'] = $user->id;
+
+        $client = new Client();
+        $url = env('API_URL_BAO_HANH').'/api/bao-hanh-san-pham';
+        $response = $client->post($url, [
+            'json' => $validated // Dữ liệu gửi đi
+        ]);
+        if ($response->getStatusCode() == 200 ) {
+
+            $customer = Customer::create([
+                'name' => $validated['name'],
+                'phone' => $validated['phone'],
+                'email' => $validated['email'] ?? null,
+                'address' => $validated['address'] ?? null,
+                'source' =>  'Kích hoạt bảo hành thủ công',
+                'user_id' => $user->id,
+                'code'  => $this->generateCode($validated['phone']).'_'.$sanpham->masp,
+                'product_id' =>  $sanpham->id,
+            ]);
+            return redirect()->back()->with('success', 'Thành công!');
+        }
+
+        return redirect()->back()->with('error', 'Không thành công!');
+    }
+
+    public function generateCode($phone)
+    {
+        $lastFourDigits = substr($phone, -4);
+        $prefix = User::first()->prefix;
+        return $prefix . '_' . $lastFourDigits;
     }
 
 }

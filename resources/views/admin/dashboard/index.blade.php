@@ -19,14 +19,14 @@
     <div class="page-inner">
         <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
             <div>
-                <h3 class="fw-bold mb-3">Bảng thống kê</h3>
+                {{-- <h3 class="fw-bold mb-3">Bảng thống kê</h3> --}}
             </div>
             {{-- <div class="ms-md-auto py-2 py-md-0">
           <a href="#" class="btn btn-label-info btn-round me-2">Manage</a>
           <a href="#" class="btn btn-primary btn-round">Add Customer</a>
         </div> --}}
         </div>
-        <div class="row">
+        {{-- <div class="row">
             <div class="col-sm-6 col-md-3">
                 <a href="{{ route('admin.{username}.message.znsMessage', ['username' => Auth::user()->username]) }}"
                     class="card card-stats card-round">
@@ -89,7 +89,7 @@
                 </a>
             </div>
             <div class="col-sm-6 col-md-3">
-                <a  {{-- {{ route('admin.{username}.zalo.zns', ['username' => Auth::user()->username]) }} --}}
+                <a
                     class="card card-stats card-round">
                     <div class="card-body">
                         <div class="row align-items-center">
@@ -110,7 +110,7 @@
                 </a>
             </div>
 
-        </div>
+        </div> --}}
 
         <div class="row">
             {{-- <div class="col-md-4">
