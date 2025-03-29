@@ -22,7 +22,8 @@ class Customer extends Model
         'user_id',
         'product_id',
         'code',
-        'dob'
+        'dob',
+        'address_buy'
     ];
 
     public function city()
