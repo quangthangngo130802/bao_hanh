@@ -78,17 +78,16 @@
             <form id="warrantyForm">
 
                 <div class="mb-3">
-                    <input type="text" class="form-control" id="name" placeholder="Họ và tên khách hàng"
-                        name="name">
+                    <input type="text" class="form-control" id="name" placeholder="Họ và tên khách hàng" name="name">
                     <div class="error-message" id="nameError"></div>
                 </div>
                 <div class="mb-3">
-                    <input type="tel" class="form-control" id="phone" placeholder="Số điện thoại bảo hành"
-                        name="phone">
+                    <input type="tel" class="form-control" id="phone" placeholder="Số điện thoại bảo hành" name="phone">
                     <div class="error-message" id="phoneError"></div>
                 </div>
                 <div class="mb-3">
-                    <textarea class="form-control" id="address" rows="3" placeholder="Địa chỉ" name="address"></textarea>
+                    <textarea class="form-control" id="address" rows="3" placeholder="Địa chỉ"
+                        name="address"></textarea>
                     <div class="error-message" id="addressError"></div>
                 </div>
                 <div class="mb-3">
@@ -110,30 +109,92 @@
             </form>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
-        document.getElementById("warrantyForm").addEventListener("submit", async function(event) {
+        document.getElementById("warrantyForm").addEventListener("submit", async function (event) {
             event.preventDefault();
 
-            let formData = new FormData(this);
-            let response = await fetch("http://127.0.0.1:8000/api/bao-hanh", {
-                method: "POST",
-                headers: {
-                    "Accept": "application/json"
-                },
-                body: formData
-            });
+            // Xóa thông báo lỗi cũ
+            document.querySelectorAll(".error-message").forEach(el => el.textContent = "");
 
-            if (response.ok) {
-                alert("Thành công!");
-                setTimeout(() => {
-                    location.reload();
-                }, 1000);
-            } else {
-                alert("Có lỗi xảy ra: " + (result.message || "Không thể kích hoạt bảo hành."));
+            // Lấy dữ liệu từ input
+            let name = document.getElementById("name").value.trim();
+            let phone = document.getElementById("phone").value.trim();
+            let address = document.getElementById("address").value.trim();
+            let masp = document.getElementById("masp").value.trim();
+            let addressBuy = document.getElementById("address_buy").value;
+
+            let isValid = true;
+
+            // Validate input
+            if (name === "") {
+                document.getElementById("nameError").textContent = "Vui lòng nhập họ và tên.";
+                isValid = false;
             }
+
+            if (phone === "") {
+                document.getElementById("phoneError").textContent = "Vui lòng nhập số điện thoại.";
+                isValid = false;
+            } else if (!/^\d{10,11}$/.test(phone)) {
+                document.getElementById("phoneError").textContent = "Số điện thoại không hợp lệ.";
+                isValid = false;
+            }
+
+            if (address === "") {
+                document.getElementById("addressError").textContent = "Vui lòng nhập địa chỉ.";
+                isValid = false;
+            }
+
+            if (masp === "") {
+                document.getElementById("maspError").textContent = "Vui lòng nhập mã sản phẩm hoặc IMEI.";
+                isValid = false;
+            }
+
+            if (addressBuy === "") {
+                document.getElementById("addressBuyError").textContent = "Vui lòng chọn nơi mua sản phẩm.";
+                isValid = false;
+            }
+
+            if (!isValid) return;
+
+            // Gửi dữ liệu lên API
+            let formData = new FormData(this);
+                let response = await fetch("https://baohanh.aicrm.vn/api/bao-hanh", {
+                    method: "POST",
+                    headers: { "Accept": "application/json" },
+                    body: formData
+                });
+
+                console.log(response);
+                // let result = await response.json(); // Thêm dòng này để lấy dữ liệu phản hồi từ API
+
+                if (response.ok) {
+                    // Hiển thị thông báo thành công
+                    Swal.fire({
+                        icon: "success",
+                        title: "Thành công!",
+                        text: "Kích hoạt bảo hành thành công.",
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1600);
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Lỗi!",
+                        text:  "Không thể kích hoạt bảo hành."
+                    });
+                }
 
         });
     </script>
+
+
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
