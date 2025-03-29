@@ -86,7 +86,7 @@ class BaoHanhController extends Controller
         return $prefix . '_' . $lastFourDigits;
     }
 
-    public function apibaohanh(Request $request){
+    public function apibaohanh(Request $request) {
         $validated = $request->validate([
             'name' => 'required',
             'phone' => 'required',
@@ -94,44 +94,56 @@ class BaoHanhController extends Controller
             'dob' => 'nullable',
             'address' => 'nullable',
             'source' => 'nullable',
-            'product_id' => 'nullable|exists:sgo_products,id', // Kiểm tra product_id
+            'product_id' => 'nullable|exists:sgo_products,id',
             'masp' => 'required',
             'address_buy' => 'required'
         ]);
 
         $sanpham = SanPham::where('masp', $validated['masp'])->first();
-        if(!$sanpham){
-            return redirect()->back()->with('error', 'Mã sản phẩm không tồn tại.');
+
+        if (!$sanpham) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Không thể kích hoạt bảo hành vì mã sản phẩm không tồn tại.'
+            ], 400);
         }
 
         $validated['product_name'] = $sanpham->name;
-        $validated['warranty_period'] = $sanpham->warranty_period.' Tháng';
+        $validated['warranty_period'] = $sanpham->warranty_period . ' Tháng';
 
         Log::info('Validation passed', $validated);
         $user = User::first();
-
         $validated['user_id'] = $user->id;
 
         $client = new Client();
-        $url = env('API_URL_BAO_HANH').'/api/bao-hanh-san-pham';
+        $url = env('API_URL_BAO_HANH') . '/api/bao-hanh-san-pham';
         $response = $client->post($url, [
-            'json' => $validated // Dữ liệu gửi đi
+            'json' => $validated
         ]);
 
-        if ($response->getStatusCode() == 200 ) {
-
+        if ($response->getStatusCode() == 200) {
             $customer = Customer::create([
                 'name' => $validated['name'],
                 'phone' => $validated['phone'],
                 'email' => $validated['email'] ?? null,
                 'address' => $validated['address'] ?? null,
-                'source' =>  'Kích hoạt bảo hành thủ công',
+                'source' => 'Kích hoạt bảo hành thủ công',
                 'user_id' => $user->id,
-                'code'  => $this->generateCode($validated['phone']).'_'.$sanpham->masp,
-                'product_id' =>  $sanpham->id,
+                'code' => $this->generateCode($validated['phone']) . '_' . $sanpham->masp,
+                'product_id' => $sanpham->id,
             ]);
-            return redirect()->back()->with('success', 'Thành công!');
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Kích hoạt bảo hành thành công.'
+            ], 200);
         }
+
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Không thể kích hoạt bảo hành. Vui lòng thử lại sau.'
+        ], 500);
     }
+
 
 }

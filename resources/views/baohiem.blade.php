@@ -78,16 +78,17 @@
             <form id="warrantyForm">
 
                 <div class="mb-3">
-                    <input type="text" class="form-control" id="name" placeholder="Họ và tên khách hàng" name="name">
+                    <input type="text" class="form-control" id="name" placeholder="Họ và tên khách hàng"
+                        name="name">
                     <div class="error-message" id="nameError"></div>
                 </div>
                 <div class="mb-3">
-                    <input type="tel" class="form-control" id="phone" placeholder="Số điện thoại bảo hành" name="phone">
+                    <input type="tel" class="form-control" id="phone" placeholder="Số điện thoại bảo hành"
+                        name="phone">
                     <div class="error-message" id="phoneError"></div>
                 </div>
                 <div class="mb-3">
-                    <textarea class="form-control" id="address" rows="3" placeholder="Địa chỉ"
-                        name="address"></textarea>
+                    <textarea class="form-control" id="address" rows="3" placeholder="Địa chỉ" name="address"></textarea>
                     <div class="error-message" id="addressError"></div>
                 </div>
                 <div class="mb-3">
@@ -112,7 +113,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        document.getElementById("warrantyForm").addEventListener("submit", async function (event) {
+        document.getElementById("warrantyForm").addEventListener("submit", async function(event) {
             event.preventDefault();
 
             // Xóa thông báo lỗi cũ
@@ -160,35 +161,37 @@
 
             // Gửi dữ liệu lên API
             let formData = new FormData(this);
-                let response = await fetch("https://baohanh.aicrm.vn/api/bao-hanh", {
-                    method: "POST",
-                    headers: { "Accept": "application/json" },
-                    body: formData
+            let response = await fetch("https://baohanh.aicrm.vn/api/bao-hanh", {
+                method: "POST",
+                headers: {
+                    "Accept": "application/json"
+                },
+                body: formData
+            });
+
+            console.log(response);
+            // let result = await response.json(); // Thêm dòng này để lấy dữ liệu phản hồi từ API
+
+            let result = await response.json();
+
+            if (response.ok) {
+                Swal.fire({
+                    icon: "success",
+                    title: "Thành công!",
+                    text: result.message,
+                    timer: 1500,
+                    showConfirmButton: false
                 });
-
-                console.log(response);
-                // let result = await response.json(); // Thêm dòng này để lấy dữ liệu phản hồi từ API
-
-                if (response.ok) {
-                    // Hiển thị thông báo thành công
-                    Swal.fire({
-                        icon: "success",
-                        title: "Thành công!",
-                        text: "Kích hoạt bảo hành thành công.",
-                        timer: 1500,
-                        showConfirmButton: false
-                    });
-
-                    setTimeout(() => {
-                        location.reload();
-                    }, 1600);
-                } else {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Lỗi!",
-                        text:  "Không thể kích hoạt bảo hành."
-                    });
-                }
+                setTimeout(() => {
+                    location.reload();
+                }, 1600);
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Lỗi!",
+                    text: result.message || "Không thể kích hoạt bảo hành."
+                });
+            }
 
         });
     </script>
