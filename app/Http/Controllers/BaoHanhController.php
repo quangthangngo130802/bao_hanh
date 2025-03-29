@@ -117,6 +117,21 @@ class BaoHanhController extends Controller
         $response = $client->post($url, [
             'json' => $validated // Dữ liệu gửi đi
         ]);
+
+        if ($response->getStatusCode() == 200 ) {
+
+            $customer = Customer::create([
+                'name' => $validated['name'],
+                'phone' => $validated['phone'],
+                'email' => $validated['email'] ?? null,
+                'address' => $validated['address'] ?? null,
+                'source' =>  'Kích hoạt bảo hành thủ công',
+                'user_id' => $user->id,
+                'code'  => $this->generateCode($validated['phone']).'_'.$sanpham->masp,
+                'product_id' =>  $sanpham->id,
+            ]);
+            return redirect()->back()->with('success', 'Thành công!');
+        }
     }
 
 }
