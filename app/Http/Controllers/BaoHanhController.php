@@ -86,4 +86,37 @@ class BaoHanhController extends Controller
         return $prefix . '_' . $lastFourDigits;
     }
 
+    public function apibaohanh(Request $request){
+        $validated = $request->validate([
+            'name' => 'required',
+            'phone' => 'required',
+            'email' => 'nullable|email',
+            'dob' => 'nullable',
+            'address' => 'nullable',
+            'source' => 'nullable',
+            'product_id' => 'nullable|exists:sgo_products,id', // Kiểm tra product_id
+            'masp' => 'required',
+            'address_buy' => 'required'
+        ]);
+
+        $sanpham = SanPham::where('masp', $validated['masp'])->first();
+        if(!$sanpham){
+            return redirect()->back()->with('error', 'Mã sản phẩm không tồn tại.');
+        }
+
+        $validated['product_name'] = $sanpham->name;
+        $validated['warranty_period'] = $sanpham->warranty_period.' Tháng';
+
+        Log::info('Validation passed', $validated);
+        $user = User::first();
+
+        $validated['user_id'] = $user->id;
+
+        $client = new Client();
+        $url = env('API_URL_BAO_HANH').'/api/bao-hanh-san-pham';
+        $response = $client->post($url, [
+            'json' => $validated // Dữ liệu gửi đi
+        ]);
+    }
+
 }

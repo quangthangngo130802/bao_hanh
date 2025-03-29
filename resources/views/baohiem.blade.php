@@ -72,12 +72,11 @@
 </head>
 
 <body>
-
     <div class="container">
         <div class="form-container">
             <h3 class="form-title">ĐĂNG KÝ KÍCH HOẠT BẢO HÀNH ONLINE</h3>
-            <form id="warrantyForm" action="{{ route('baohanh.kichhoat') }}" method="post">
-                @csrf
+            <form id="warrantyForm">
+
                 <div class="mb-3">
                     <input type="text" class="form-control" id="name" placeholder="Họ và tên khách hàng"
                         name="name">
@@ -97,6 +96,7 @@
                         name="masp">
                     <div class="error-message" id="maspError"></div>
                 </div>
+
                 <div class="mb-3">
                     <select class="form-control" id="address_buy" name="address_buy">
                         <option value="">Nơi mua sản phẩm</option>
@@ -110,45 +110,30 @@
             </form>
         </div>
     </div>
-
     <script>
-        document.getElementById("warrantyForm").addEventListener("submit", function(event) {
-            event.preventDefault(); // Ngăn chặn submit mặc định
+        document.getElementById("warrantyForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
 
-            // Lấy giá trị các input
-            let name = document.getElementById("name").value.trim();
-            let phone = document.getElementById("phone").value.trim();
-            let address = document.getElementById("address").value.trim();
-            let masp = document.getElementById("masp").value.trim();
-            let addressBuy = document.getElementById("address_buy").value.trim();
+            let formData = new FormData(this);
+            let response = await fetch("http://127.0.0.1:8000/api/bao-hanh", {
+                method: "POST",
+                headers: {
+                    "Accept": "application/json"
+                },
+                body: formData
+            });
 
-            // Xóa lỗi cũ
-            let errorFields = ["nameError", "phoneError", "addressError", "maspError", "addressBuyError"];
-            errorFields.forEach(id => document.getElementById(id).innerText = "");
-
-            // Kiểm tra từng trường một, dừng ngay khi gặp lỗi đầu tiên
-            if (name === "") {
-                document.getElementById("nameError").innerText = "Vui lòng nhập họ và tên.";
-                return;
-            }
-            if (phone === "" || !/^\d{10,11}$/.test(phone)) {
-                document.getElementById("phoneError").innerText = "Số điện thoại không hợp lệ (10-11 số).";
-                return;
-            }
-            if (masp === "") {
-                document.getElementById("maspError").innerText = "Vui lòng nhập mã sản phẩm hoặc mã IMEI.";
-                return;
-            }
-            if (addressBuy === "") {
-                document.getElementById("addressBuyError").innerText = "Vui lòng chọn nơi mua sản phẩm.";
-                return;
+            if (response.ok) {
+                alert("Thành công!");
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
+            } else {
+                alert("Có lỗi xảy ra: " + (result.message || "Không thể kích hoạt bảo hành."));
             }
 
-            this.submit();
         });
     </script>
-
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
