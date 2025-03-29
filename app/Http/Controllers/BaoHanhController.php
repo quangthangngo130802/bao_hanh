@@ -131,6 +131,7 @@ class BaoHanhController extends Controller
                 'user_id' => $user->id,
                 'code' => $this->generateCode($validated['phone']) . '_' . $sanpham->masp,
                 'product_id' => $sanpham->id,
+                'address_buy' => $validated['address_buy'],
             ]);
 
             return response()->json([

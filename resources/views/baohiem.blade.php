@@ -99,10 +99,14 @@
 
                 <div class="mb-3">
                     <select class="form-control" id="address_buy" name="address_buy">
-                        <option value="">Nơi mua sản phẩm</option>
-                        <option value="store1">Cửa hàng A</option>
-                        <option value="store2">Cửa hàng B</option>
-                        <option value="store3">Cửa hàng C</option>
+                        <option value="Nơi mua sản phẩm">Nơi mua sản phẩm</option>
+                        <option value="Lotte Mart">Lotte Mart</option>
+                        <option value="Kohan">Kohan</option>
+                        <option value="Co.op Mart">Co.op Mart</option>
+                        <option value="Shopee">Shopee</option>
+                        <option value="Tiktok">Tiktok</option>
+                        <option value="Lazada">Lazada</option>
+                        <option value="Các địa chỉ khác">Các địa chỉ khác</option>
                     </select>
                     <div class="error-message" id="addressBuyError"></div>
                 </div>
